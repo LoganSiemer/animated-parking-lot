@@ -16,7 +16,7 @@
     <input type="button" value="reset" class="btn-reset" onclick="reset()">
     <input type="button" value="start" class="btn-start" onclick="start()">
     <input type="button" value="stop" class="btn-stop" onclick="stop()">
-    <div class="ready-position"></div>
+    <div class="ready"><img class="car" src="car-yellow.png" /></div>
 </body>
 <script>
 //create the car variable and the intersection variable.
@@ -25,14 +25,17 @@ var intersection = document.querySelector('.Intersection');
 
 //create a variable to hold the intervalId
 var intervalId;
+var cars = [];
+var unparkedCars = [];
+var unparkedCars = [];
 
 //call the reset function to reset the code after running.
 reset();
 
 //create the reset function.
 function reset() {
-    car.style.top = "710px";
-    car.style.left = "335px";
+    car.style.top = "680px";
+    car.style.left = "345px";
 }
 
 //create a function that will allow me to set the top, left, width, and height of the intersection.

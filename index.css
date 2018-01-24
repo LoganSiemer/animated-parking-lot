@@ -9,15 +9,24 @@ body {
 	height: 98vh;
 }
 
-.ready-position {
+.car {
 	position: absolute;
 	top: 680px;
 	left: 345px;
 	width: 122px;
-	height: 67px;
-	border: solid black 1px;
+	height: 77px;
 	transform: rotate(-90deg);
 	z-index: 100;
+}
+
+.ready {
+	left: 345px;
+	top: 380px;
+	width: 77px;
+	height: 122px;
+	border-right: solid black 1px;
+	border-left: solid black 1px;
+	border-bottom: solid black 1px;
 }
 
 .parkinglot {
