@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Logans Parking-Lot Simulator</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+    <center><img class="parkinglot" src="parkinglot.jpg"></center>
+    <div class="Intersection1"></div>
+    <div class="Intersection2"></div>
+    <div class="Intersection3"></div>
+    <div class="Intersection4"></div>
+    <input type="button" value="reset" class="btn-reset" onclick="reset()">
+    <input type="button" value="start" class="btn-start" onclick="start()">
+    <input type="button" value="stop" class="btn-stop" onclick="stop()">
+    <div class="ready-position"></div>
+</body>
+<script>
+//create the car variable and the intersection variable.
+var car = document.querySelector(".car");
+var intersection = document.querySelector('.Intersection');
+
+//create a variable to hold the intervalId
+var intervalId;
+
+//call the reset function to reset the code after running.
+reset();
+
+//create the reset function.
+function reset() {
+    car.style.top = "710px";
+    car.style.left = "335px";
+}
+
+//create a function that will allow me to set the top, left, width, and height of the intersection.
+function Intersection(top, left, width, height, outlets) {
+    this.top = top;
+    this.left = left;
+    this.width = width;
+    this.height = height;
+    this.outlets = outlets;
+}
+
+//create an array that holdes the intersections.
+//create an array of directions the outlets can releas the cars.
+var Intersections = [
+    new Intersection(375, 346, 126, 118,['top', 'right']),
+    new Intersection(135, 346, 126, 118,['top', 'right', 'bottom']),
+    new Intersection(135, 809, 126, 118,['top', 'bottom', 'left']),
+    new Intersection(375, 809, 126, 118,['top', 'bottom', 'left'])
+];
+
+//create a function that allows me to set the width, height, left, and toppositions as well as where the openside to the space is.
+function Space(width, height, left, top, openSide) {
+    this.top = top;
+    this.left = left;
+    this.width = width;
+    this.height = height;
+    this.openSide = openSide;
+    this.shadowBox = new ShadowBox(top, left, width, height);
+}
+
+function ShadowBox(top, left, width, height, openSide) {
+    this.width = width;
+    this.height = height;
+    
+    if (openSide === 'right') {
+        this.top = top;
+        this.left = left + width;
+        this.width = width;
+        this.height = height;
+    } else if (openSide === 'left') {
+        this.top = top;
+        this.left = left - width;
+        this.width = width;
+        this.height = height;
+    } else if (openSide === 'top') {
+        this.top = top - height;
+        this.left = left;
+        this.width = width;
+        this.height = height;
+    } else if (openSide === 'bottom') {
+        this.top = top + height;
+        this.left = left;
+        this.width = width;
+        this.height = height;
+    }
+
+    this.top = top;
+    this.left = left;
+};
+//create an array that holds all of the spaces.
+var Spaces = [
+
+    //open direction will be on the right side
+    new Space(120, 66, 228, 9, 'right'),
+    new Space(120, 66, 228, 77, 'right'),
+    new Space(120, 66, 228, 145, 'right'),
+    new Space(120, 66, 228, 213, 'right'),
+    new Space(120, 66, 228, 281, 'right'),
+    new Space(120, 66, 228, 349, 'right'),
+    new Space(120, 66, 228, 416, 'right'),
+    new Space(120, 66, 228, 483, 'right'),
+    new Space(120, 66, 228, 551, 'right'),
+
+    //open direction will be on the bottom side
+    new Space(64, 114, 546, 11, 'bottom'),
+    new Space(64, 114, 608, 11, 'bottom'),
+    new Space(64, 114, 671, 11, 'bottom'),
+    new Space(64, 114, 735, 11, 'bottom'),
+
+    //open direction will be on the top side
+    new Space(64, 114, 483, 236, 'top'),
+    new Space(64, 114, 545, 236, 'top'),
+    new Space(64, 114, 607, 236, 'top'),
+    new Space(64, 114, 670, 236, 'top'),
+    new Space(64, 114, 733, 236, 'top'),
+
+    //open direction will be on the top side
+    new Space(64, 114, 482, 460, 'top'),
+    new Space(64, 114, 545, 458, 'top'),
+    new Space(64, 114, 607, 458, 'top'),
+    new Space(64, 114, 670, 460, 'top'),
+    new Space(64, 114, 733, 458, 'top'),
+
+    //open direction will be on the left side
+    new Space(64, 114, 609, 12, 'left'),
+    new Space(64, 114, 609, 74, 'left'),
+    new Space(64, 114, 609, 137, 'left'),
+    new Space(64, 114, 609, 200, 'left'),
+    new Space(64, 114, 609, 263, 'left'),
+    new Space(64, 114, 609, 325, 'left'),
+    new Space(64, 114, 609, 388, 'left'),
+    new Space(64, 114, 609, 450, 'left')
+];
+console.log(Spaces);
+
+// var t1 = new Space(124, 65, 446, 41);
+// var t1Div = document.createElement('div');
+// t1Div.setAttribute('class', 'divTag');
+// t1Div.setAttribute('src', 'car-orange.png');
+// t1Div.style.top = t1.top + 'px';
+// t1Div.style.left = t1.left + 'px';
+// t1Div.style.width = t1.width + 'px';
+// t1Div.style.height = t1.height + 'px';
+//document.body.appendChild(t1Div);
+function moveNorth() {
+    car.style.top = `${parseInt(car.style.top.replace("px","")) - 10}px`;
+    var carTop = car.style.top.replace('px', '');
+    var carRight = car.style.right.replace('px', '');
+    var carBottom = car.style.bottom.replace('px', '');
+    var carLeft = car.style.left.replace('px', '');
+
+    if (carTop >= 2) {
+        stop();
+        setTimeout(south);
+    }else if (carRight >= 2) {
+    	stop();
+        setTimeout(south);
+    }else if (carBottom >= 2) {
+    	stop();
+        setTimeout(south);
+    }else if(carLeft >= 2) {
+    	stop();
+        setTimeout(south);
+    }
+}
+
+function south() {
+
+}
+
+//create a function that will set the movement speed of said car.
+function moveit() {
+    car.style.top = `${parseInt(car.style.top.replace("px","")) - 10}px`;
+}
+
+//create a function to set the intervalId, which will allow you to move the car when you press the start button
+function moving() {
+    intervalId = setInterval(moveit, 30);
+}
+
+//create the stop button to stop your moving car.
+function stop() {
+    clearInterval(intervalId);
+}
+
+//create the start button to move the car.
+function start() {
+    intervalId = setInterval(moveit, 30);
+}
+</script>
+
+</html>

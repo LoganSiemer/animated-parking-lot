@@ -1,0 +1,27 @@
+body {
+	margin: 0px;
+	padding: 0px; 
+}
+
+.body {
+	border: solid 2px black;
+	width: 100vw;
+	height: 98vh;
+}
+
+.ready-position {
+	position: absolute;
+	top: 680px;
+	left: 344px;
+	width: 122px;
+	height: 67px;
+	border: solid black 1px;
+	transform: rotate(-90deg);
+	z-index: 100;
+}
+
+.parkinglot {
+	width: 845px;
+	z-index: 0;
+}
+
